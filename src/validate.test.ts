@@ -6,8 +6,6 @@ test('basic', ()=> {
     expect(()=> {s.parse('123')}).toThrow()
     expect(()=> {s.parse(undefined)}).toThrow()
     expect(()=> {s.parse(null)}).toThrow()
-
-    s.min(3).max(10)
 })
 
 test('nested', ()=> {
