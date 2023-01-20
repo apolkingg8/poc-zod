@@ -28,6 +28,20 @@ test('nested', ()=> {
     expect(()=> {schema.parse({
         prop1: '123',
         prop2: 123,
+        prop3: {
+            prop1: '123',
+        }
+    })}).toThrow()
+    expect(()=> {schema.parse({
+        prop1: '123',
+        prop3: {
+            prop1: '123',
+            prop2: 123,
+        }
+    })}).toThrow()
+    expect(()=> {schema.parse({
+        prop1: '123',
+        prop2: 123,
         iShouldNotHere: 'no',
         prop3: {
             prop1: '123',
