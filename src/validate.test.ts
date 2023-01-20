@@ -11,7 +11,7 @@ test('basic', ()=> {
 })
 
 test('nested', ()=> {
-    const s = z.object({
+    const schema = z.object({
         prop1: z.string(),
         prop2: z.number(),
         prop3: z.object({
@@ -19,7 +19,7 @@ test('nested', ()=> {
             prop2: z.number(),
         }),
     })
-    expect(()=> {s.parse({
+    expect(()=> {schema.parse({
         prop1: '123',
         prop2: 123,
         prop3: {
@@ -27,7 +27,7 @@ test('nested', ()=> {
             prop2: 123,
         }
     })}).not.toThrow()
-    expect(()=> {s.parse({
+    expect(()=> {schema.parse({
         prop1: '123',
         prop2: 123,
         iShouldNotHere: 'no',
@@ -36,7 +36,7 @@ test('nested', ()=> {
             prop2: 123,
         }
     })}).not.toThrow()
-    expect(()=> {s.strict().parse({
+    expect(()=> {schema.strict().parse({
         prop1: '123',
         prop2: 123,
         iShouldNotHere: 'no',
@@ -45,7 +45,7 @@ test('nested', ()=> {
             prop2: 123,
         }
     })}).toThrow()
-    expect(s.parse({
+    expect(schema.parse({
         prop1: '123',
         prop2: 123,
         iShouldNotHere: 'no',
@@ -61,7 +61,7 @@ test('nested', ()=> {
             prop2: 123,
         }
     })
-    expect(()=> {s.parse({
+    expect(()=> {schema.parse({
         prop1: '123',
         prop2: 123,
         prop3: {
@@ -81,7 +81,7 @@ test('nested', ()=> {
             iShouldNotHere: 'no',
         }
     })}).toThrow()*/
-    expect(s.parse({
+    expect(schema.parse({
         prop1: '123',
         prop2: 123,
         prop3: {
@@ -97,21 +97,21 @@ test('nested', ()=> {
             prop2: 123,
         }
     })
-    expect(()=> {s.parse({
+    expect(()=> {schema.parse({
         prop1: '123',
         prop3: {
             prop1: '123',
             prop2: 123,
         }
     })}).toThrow()
-    expect(()=> {s.parse({
+    expect(()=> {schema.parse({
         prop1: '123',
         prop2: 123,
         prop3: {
             prop1: '123',
         }
     })}).toThrow()
-    expect(()=> {s.parse({
+    expect(()=> {schema.parse({
         prop1: '123',
         prop2: '123',
         prop3: {
@@ -119,7 +119,7 @@ test('nested', ()=> {
             prop2: 123,
         }
     })}).toThrow()
-    expect(()=> {s.parse({
+    expect(()=> {schema.parse({
         prop1: '123',
         prop2: 123,
         prop3: {
@@ -127,7 +127,7 @@ test('nested', ()=> {
             prop2: '123',
         }
     })}).toThrow()
-    expect(()=> {s.parse({
+    expect(()=> {schema.parse({
         prop1: '123',
         prop2: 123,
         prop3: 'no',

@@ -21,9 +21,7 @@ const schema = z.object({
     password: z.string().regex(
         /^(?=.*[A-Z].*[A-Z])(?=.*[!@#$&*])(?=.*[0-9].*[0-9])(?=.*[a-z].*[a-z].*[a-z]).{8,}$/
     ),
-    passwordAgain: z.string().regex(
-        /^(?=.*[A-Z].*[A-Z])(?=.*[!@#$&*])(?=.*[0-9].*[0-9])(?=.*[a-z].*[a-z].*[a-z]).{8,}$/
-    ),
+    passwordAgain: z.string(),
 }).superRefine(({ passwordAgain, password }, ctx) => {
     if (passwordAgain !== password) {
         ctx.addIssue({
