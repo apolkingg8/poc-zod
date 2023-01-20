@@ -6,18 +6,132 @@ test('basic', ()=> {
     expect(()=> {s.parse('123')}).toThrow()
     expect(()=> {s.parse(undefined)}).toThrow()
     expect(()=> {s.parse(null)}).toThrow()
+
+    s.min(3).max(10)
 })
 
 test('nested', ()=> {
-
-})
-
-test('complex', ()=> {
-
-})
-
-test('performance', ()=> {
-
+    const s = z.object({
+        prop1: z.string(),
+        prop2: z.number(),
+        prop3: z.object({
+            prop1: z.string(),
+            prop2: z.number(),
+        }),
+    })
+    expect(()=> {s.parse({
+        prop1: '123',
+        prop2: 123,
+        prop3: {
+            prop1: '123',
+            prop2: 123,
+        }
+    })}).not.toThrow()
+    expect(()=> {s.parse({
+        prop1: '123',
+        prop2: 123,
+        iShouldNotHere: 'no',
+        prop3: {
+            prop1: '123',
+            prop2: 123,
+        }
+    })}).not.toThrow()
+    expect(()=> {s.strict().parse({
+        prop1: '123',
+        prop2: 123,
+        iShouldNotHere: 'no',
+        prop3: {
+            prop1: '123',
+            prop2: 123,
+        }
+    })}).toThrow()
+    expect(s.parse({
+        prop1: '123',
+        prop2: 123,
+        iShouldNotHere: 'no',
+        prop3: {
+            prop1: '123',
+            prop2: 123,
+        }
+    })).toEqual({
+        prop1: '123',
+        prop2: 123,
+        prop3: {
+            prop1: '123',
+            prop2: 123,
+        }
+    })
+    expect(()=> {s.parse({
+        prop1: '123',
+        prop2: 123,
+        prop3: {
+            prop1: '123',
+            prop2: 123,
+            iShouldNotHere: 'no',
+        }
+    })}).not.toThrow()
+    // should have a deepStrict()
+    // https://github.com/colinhacks/zod/issues/1370
+    /*expect(()=> {s.strict().parse({
+        prop1: '123',
+        prop2: 123,
+        prop3: {
+            prop1: '123',
+            prop2: 123,
+            iShouldNotHere: 'no',
+        }
+    })}).toThrow()*/
+    expect(s.parse({
+        prop1: '123',
+        prop2: 123,
+        prop3: {
+            prop1: '123',
+            prop2: 123,
+            iShouldNotHere: 'no',
+        }
+    })).toEqual({
+        prop1: '123',
+        prop2: 123,
+        prop3: {
+            prop1: '123',
+            prop2: 123,
+        }
+    })
+    expect(()=> {s.parse({
+        prop1: '123',
+        prop3: {
+            prop1: '123',
+            prop2: 123,
+        }
+    })}).toThrow()
+    expect(()=> {s.parse({
+        prop1: '123',
+        prop2: 123,
+        prop3: {
+            prop1: '123',
+        }
+    })}).toThrow()
+    expect(()=> {s.parse({
+        prop1: '123',
+        prop2: '123',
+        prop3: {
+            prop1: '123',
+            prop2: 123,
+        }
+    })}).toThrow()
+    expect(()=> {s.parse({
+        prop1: '123',
+        prop2: 123,
+        prop3: {
+            prop1: '123',
+            prop2: '123',
+        }
+    })}).toThrow()
+    expect(()=> {s.parse({
+        prop1: '123',
+        prop2: 123,
+        prop3: 'no',
+    })}).toThrow()
 })
 
 export {}

@@ -8,8 +8,29 @@ import {zodResolver} from "@hookform/resolvers/zod";
 import {useForm} from "react-hook-form";
 
 const schema = z.object({
-    name: z.string().min(1, { message: 'Required' }),
-    age: z.number().min(10),
+    email: z.string().email(),
+    /*
+    ^                         Start anchor
+    (?=.*[A-Z].*[A-Z])        Ensure string has two uppercase letters.
+    (?=.*[!@#$&*])            Ensure string has one special case letter.
+    (?=.*[0-9].*[0-9])        Ensure string has two digits.
+    (?=.*[a-z].*[a-z].*[a-z]) Ensure string has three lowercase letters.
+    .{8,}                      Ensure string length more than 8.
+    $                         End anchor.
+    */
+    password: z.string().regex(
+        /^(?=.*[A-Z].*[A-Z])(?=.*[!@#$&*])(?=.*[0-9].*[0-9])(?=.*[a-z].*[a-z].*[a-z]).{8,}$/
+    ),
+    passwordAgain: z.string().regex(
+        /^(?=.*[A-Z].*[A-Z])(?=.*[!@#$&*])(?=.*[0-9].*[0-9])(?=.*[a-z].*[a-z].*[a-z]).{8,}$/
+    ),
+}).superRefine(({ passwordAgain, password }, ctx) => {
+    if (passwordAgain !== password) {
+        ctx.addIssue({
+            code: "custom",
+            message: "The passwords did not match"
+        });
+    }
 })
 
 function App() {
@@ -33,10 +54,15 @@ function App() {
                     })}
                 >
                     <TextField
-                        inputProps={{...register('name')}}
+                        inputProps={{...register('email')}}
                     />
                     <TextField
-                        inputProps={{...register('age')}}
+                        inputProps={{...register('password')}}
+                        type={"password"}
+                    />
+                    <TextField
+                        inputProps={{...register('passwordAgain')}}
+                        type={"password"}
                     />
                     <Button
                         type={"submit"}
