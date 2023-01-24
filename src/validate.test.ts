@@ -17,6 +17,9 @@ test('nested', ()=> {
             prop2: z.number(),
         }),
     })
+    type s = z.infer<typeof schema>
+
+
     expect(()=> {schema.parse({
         prop1: '123',
         prop2: 123,
